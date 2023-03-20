@@ -34,6 +34,8 @@ func Configure(config Config) *ActLogger {
 		Compress:   config.Compress,
 	})
 
+	//writers = append(writers, os.Stdout, os.Stderr)
+
 	zerolog.LevelFieldName = "level"
 	zerolog.TimestampFieldName = "time"
 
