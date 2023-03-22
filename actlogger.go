@@ -2,7 +2,6 @@ package actlogger
 
 import (
 	"io"
-	"os"
 
 	"github.com/rs/zerolog"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -34,7 +33,7 @@ func Configure(config Config) *ActLogger {
 		Compress:   config.Compress,
 	})
 
-	writers = append(writers, os.Stdout)
+	//writers = append(writers, os.Stdout)
 
 	zerolog.LevelFieldName = "level"
 	zerolog.TimestampFieldName = "t"
