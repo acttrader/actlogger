@@ -2,6 +2,7 @@ package actlogger
 
 import (
 	"io"
+	"os"
 
 	"github.com/rs/zerolog"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -17,8 +18,10 @@ type Config struct {
 	MaxSize     int  // MaxSize the max size in MB of the logfile before it's rolled
 	MaxBackups  int  // MaxBackups the max number of rolled files to keep
 	MaxAge      int  // MaxAge the max age in days to keep a logfile
-	DebugLevel  bool //DebugLevel bool
-	Compress    bool //Compress logs archive
+	DebugLevel  bool // DebugLevel bool
+	Compress    bool // Compress logs archive
+	StdOut      bool // stdout
+	StdErr      bool // stderr
 }
 
 // Configure sets up the logging framework
@@ -33,7 +36,13 @@ func Configure(config Config) *ActLogger {
 		Compress:   config.Compress,
 	})
 
-	//writers = append(writers, os.Stdout)
+	if config.StdOut {
+		writers = append(writers, os.Stdout)
+	}
+
+	if config.StdErr {
+		writers = append(writers, os.Stderr)
+	}
 
 	zerolog.LevelFieldName = "level"
 	zerolog.TimestampFieldName = "t"
