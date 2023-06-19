@@ -20,28 +20,24 @@ type Config struct {
 	MaxAge      int  // MaxAge the max age in days to keep a logfile
 	DebugLevel  bool // DebugLevel bool
 	Compress    bool // Compress logs archive
-	StdOut      bool // stdout
-	StdErr      bool // stderr
+	Std         bool // stdout & stderr
 }
 
 // Configure sets up the logging framework
 func Configure(config Config) *ActLogger {
 	var writers []io.Writer
 
-	writers = append(writers, &lumberjack.Logger{
-		Filename:   config.Filepath,
-		MaxBackups: config.MaxBackups, // files
-		MaxSize:    config.MaxSize,    // megabytes
-		MaxAge:     config.MaxAge,     // days
-		Compress:   config.Compress,
-	})
-
-	if config.StdOut {
+	if config.Std {
 		writers = append(writers, os.Stdout)
-	}
-
-	if config.StdErr {
 		writers = append(writers, os.Stderr)
+	} else {
+		writers = append(writers, &lumberjack.Logger{
+			Filename:   config.Filepath,
+			MaxBackups: config.MaxBackups, // files
+			MaxSize:    config.MaxSize,    // megabytes
+			MaxAge:     config.MaxAge,     // days
+			Compress:   config.Compress,
+		})
 	}
 
 	zerolog.LevelFieldName = "level"
