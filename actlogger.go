@@ -20,16 +20,15 @@ type Config struct {
 	MaxAge      int  // MaxAge the max age in days to keep a logfile
 	DebugLevel  bool // DebugLevel bool
 	Compress    bool // Compress logs archive
-	Std         bool // stdout & stderr
+	StdOut      bool // stdout & stderr
 }
 
 // Configure sets up the logging framework
 func Configure(config Config) *ActLogger {
 	var writers []io.Writer
 
-	if config.Std {
+	if config.StdOut {
 		writers = append(writers, os.Stdout)
-		writers = append(writers, os.Stderr)
 	} else {
 		writers = append(writers, &lumberjack.Logger{
 			Filename:   config.Filepath,
